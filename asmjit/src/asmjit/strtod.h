@@ -19,6 +19,9 @@
 # define ASMTK_STRTOD_XLOCALE
 # include <locale.h>
 # include <stdlib.h>
+# if __APPLE__ // TODO: should probably check the existence of this header
+# include <xlocale.h>
+# endif
 #endif
 
 namespace asmtk {
