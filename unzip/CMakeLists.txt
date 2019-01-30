@@ -1,16 +1,20 @@
-set(UNZIP_SRC
-  ioapi.cpp
-  unzip.cpp
-  ioapi_mem.cpp
-)
+cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
+project(unzip VERSION 9999 LANGUAGES CXX)
+
+find_package(ZLIB REQUIRED)
 
 add_library(unzip STATIC
-  ${UNZIP_SRC}
+    ioapi.cpp
+    ioapi_mem.cpp
+    unzip.cpp
 )
 
-set_target_properties(unzip
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-)
+add_library(unzip::unzip ALIAS unzip)
 
+target_link_libraries(unzip PRIVATE ZLIB::ZLIB)
+target_include_directories(unzip PUBLIC ${PROJECT_SOURCE_DIR})
+
+# BAD HORRIBLE EVIL DO NOT INCLUDE CROSS-PROJECT HEADERS
+target_include_directories(unzip PRIVATE
+    ${PROJECT_SOURCE_DIR}/../../cocos
+)
